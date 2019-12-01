@@ -1,0 +1,22 @@
+{
+  "name": "project62",
+  "version": "1.0.0",
+  "description": "",
+  "engines": {
+    "node": "8.12.0"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/n0n9n4iiz/webendproject.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/n0n9n4iiz/webendproject/issues"
+  },
+  "homepage": "https://github.com/n0n9n4iiz/webendproject#readme"
+}
