@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/n0n9n4iiz/webendproject/issues"
   },
-  "homepage": "https://github.com/n0n9n4iiz/webendproject#readme"
+  "homepage": "https://github.com/n0n9n4iiz/webendproject#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
