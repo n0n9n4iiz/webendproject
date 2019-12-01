@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Title</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+    integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <style>
+    table,
+    th,
+    td {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+
+<body style="background-color: rgb(228, 228, 228);">
+  <div class="row" style="text-align: center; background-color: rgb(157, 226, 200);">
+    <div class="col-2">
+      <button type="button" class="btn"><i class="fas fa-arrow-left"
+          onclick="window.location.href='home.html'"></i></button>
+    </div>
+    <div class="col-10">
+      <div class="navbar-brand" style="padding-right: 20%;">เพิ่มรายการผู้ป่วย</div>
+    </div>
+  </div>
+  <br>
+  <div class="container">
+    <div class="form-group row">
+      <label for="" class="col-4 col-form-label"
+        style="text-align: right; font-size: 20px; padding-top: 2px;">เลขบัตรประชาชน</label>
+      <div class="col-6">
+        <input type="number" class="form-control" id="id" placeholder="">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12" style="text-align: center;">
+        <button type="button" class="btn"
+          style="background-color: rgb(240, 240, 240); border-radius: 8px; box-shadow: 1px 3px #999; "
+          onclick="search();">ค้นหา</button>
+      </div>
+    </div>
+
+    <br>
+    <div id="head" ></div>
+    <div id="name"></div>
+
+  </div>
+
+  </div>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+
+    function search() {
+      var id = document.getElementById("id").value;
+      if (id == '') {
+        alert("กรุณากรอกเลขบัตรประชาชน");
+        document.getElementById('head').innerHTML = '';
+        document.getElementById("name").innerHTML = '';
+      } else {
+        sendid(id);
+      }
+    }
+    function sendid(id) {
+      axios.get('https://endproject62.herokuapp.com/getperson/' + id).then(function (rs) {
+        var testobject = rs.data;
+        console.log(testobject[0].firstname)
+        if (id != testobject[0].personid) {
+          //use cancatch
+        }
+        testobject.forEach(element => {
+          document.getElementById('head').innerHTML = 
+          '<div class="row" style="text-align: center; background-color: white; border-right:solid 1px; border-left:solid 1px; border-top:solid 1px;">' +
+            '<div class="col-3" style="border-right:solid 1px;">' +
+            'ID' +
+            '</div>' +
+            '<div class="col-3" style="border-right:solid 1px;">' +
+            'HN' +
+            '</div>' +
+            '<div class="col-3" style="border-right:solid 1px;">' +
+            'Name' +
+            '</div>' +
+            '<div class="col-3">' +
+            '</div>' +
+            '</div>';
+          document.getElementById("name").innerHTML =
+            "<div class='row' style='text-align: center; background: rgb(255, 254, 208); border-top:solid 1px; border-right:solid 1px; border-left:solid 1px;'>" +
+            "<div class='col-3'>" +
+            element.personid +
+            "</div>" +
+            "<div class='col-3'>" +
+            element.hn +
+            "</div>" +
+            "<div class='col-3'>" +
+            element.firstname+" "+element.lastname +
+            "</div>" +
+            "<div class='col-3'>" +
+            '<button type="button" style="background-color: rgb(240, 240, 240); border-radius: 6px; width: 50px; height: 30px; font-size: 14px;" onclick="choosed(\'' + element.hn + '\',\'' + element.firstname + '\')">เลือก</button>' +
+            "</div>" +
+            "</div>" + "<div class='row' style='text-align: center; background-color: white; padding-bottom: 50%; border-right:solid 1px; border-left:solid 1px;'>" + "</div>";
+        });
+      }).catch(function (error) {
+       
+        alert("ไม่พบเลขบัตรประชาชน");
+        document.getElementById('head').innerHTML = '';
+        document.getElementById("name").innerHTML = '';
+      })
+    }
+
+    function choosed(hn,namedis) {
+      localStorage.setItem("hn", hn);
+      localStorage.setItem("namedis", namedis); 
+      window.location.href = 'selected_person.html';
+    }
+
+  </script>
+</body>
+
+</html>

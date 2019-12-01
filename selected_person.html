@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Title</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+    integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <!-- <style>
+    select {
+      text-align-last: center;
+    }
+  </style> -->
+</head>
+
+<body style="background-color: rgb(228, 228, 228);">
+  <div class="row" style="text-align: center; background-color: rgb(157, 226, 200);">
+    <div class="col-2">
+      <button type="button" class="btn"><i class="fas fa-arrow-left"
+          onclick="window.location.href='home.html'"></i></button>
+    </div>
+    <div class="col-10">
+      <div class="navbar-brand" style="padding-right: 20%;">เพิ่มรายการผู้ป่วย</div>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-6" style="padding-left: 100px;">
+      <div id="namedisplay" style="text-align: left;"></div>
+    </div>
+    <div class="col-6" style="padding-right: 100px;">
+      <div id="todaytime" style="text-align: right; color: rgb(153, 153, 153)"></div>
+    </div>
+  </div>
+  <hr>
+  <div class="row" style="text-align: center; margin-top: -5px; margin-bottom: -5px;">
+    <div class="col-6">
+      ลำดับ
+    </div>
+    <div class="col-6">
+      ห้อง
+    </div>
+  </div>
+  <hr>
+
+  <div class="row" style="margin-bottom: -15px;">
+    <div class="col-6">
+      <div id="TextBoxesGroup" style="text-align: right">
+        <div class="form-group">
+          <input type="text" class="form-control" id="textbox1" aria-describedby="helpId" placeholder="" value="1"
+            style="text-align: center;" disabled width="200px;">
+        </div>
+      </div>
+
+    </div>
+    <div class="col-6">
+      <div id="SelectboxesGroup">
+        <div class="form-group">
+          <select class="form-control" name="" id="selectbox1">
+            <option>-- เลือกสถานที่ --</option>
+
+          </select>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <hr>
+  <div class="row" style="text-align: center;">
+    <div class="col-6" style="text-align: right;">
+      <button type="button" class="btn btn-primary" id="addnewroom">เพิ่มรายการ +</button>
+    </div>
+    <div class="col-6" style="text-align: left;">
+      <button type="button" class="btn btn-danger" id="removeButton">ลบรายการ -</i></button>
+    </div>
+  </div>
+
+  <hr>
+  <div class="row" style="text-align: center;">
+    <div class="col-12">
+      <!-- Button trigger modal -->
+      <button id="modalbutton" type="button" class="btn btn-info" data-toggle="modal"
+        data-target="#modalconfirm">ยืนยัน</button>
+      <!-- Modal -->
+      <div id="modalconfirms"></div>
+    </div>
+  </div>
+  </div>
+
+  <script type="text/javascript">
+    var today = new Date();
+    var mm = today.getMonth() + 1;
+    var dd = today.getDate();
+    var yyyy = today.getFullYear();
+    if (mm == 1 || mm == 2 || mm == 3 || mm == 4 || mm == 5 || mm == 6 || mm == 7 || mm == 8 || mm == 9) {
+      mm = "0" + mm
+    }
+    if (dd == 1 || dd == 2 || dd == 3 || dd == 4 || dd == 5 || dd == 6 || dd == 7 || dd == 8 || dd == 9) {
+      dd = "0" + dd
+    }
+    var fDate = dd + '/' + mm + '/' + yyyy;
+    document.getElementById('todaytime').innerHTML = fDate
+    document.getElementById('namedisplay').innerHTML = localStorage.getItem('hn') + " ";
+    document.getElementById('namedisplay').innerHTML += localStorage.getItem('namedis');
+    //--addnew
+    var counter = 2;
+    $(document).ready(function () {
+
+      $("#addnewroom").click(function () {
+
+        if (counter < 6) {
+          var newTextBoxDiv = $(document.createElement('div')).attr("id", "textboxdiv" + counter);
+          newTextBoxDiv.after().html('<div class="form-group"><input type="text" class="form-control" id="textbox' + counter + '" aria-describedby="helpId" placeholder="" value="' + counter + '" style="text-align: center;" disabled> </div>');
+          newTextBoxDiv.appendTo("#TextBoxesGroup");
+
+          var newSelectBoxDiv = $(document.createElement('div')).attr("id", "selectboxdiv" + counter);
+
+          newSelectBoxDiv.after().html('<div class="form-group">' +
+            '<select class="form-control" name="" id="selectbox' + counter + '" >' +
+            '<option>-- เลือกสถานที่ --</option>' +
+            '</select>' +
+            '</div>')
+          addnew1();
+          newSelectBoxDiv.appendTo("#SelectboxesGroup");
+          console.log("textboxdiv" + counter);
+          console.log("selectboxdiv" + counter);
+          counter++;
+        } else {
+          alert("เพิ่มรายการได้สูงสุด 5 ลำดับ")
+        }
+      })
+      //--remove row
+      $("#removeButton").click(function () {
+        if (counter == 2) {
+          alert("ไม่สามารถทำได้"); return false;
+        }
+        counter--;
+        $("#textboxdiv" + counter).remove();
+        $("#selectboxdiv" + counter).remove();
+      });
+      //--check modal
+      $("#modalbutton").click(function () {
+        for (no = 1; no < counter; no++) {
+          var room = $('#selectbox' + no).val();
+          if (room == '-- เลือกสถานที่ --') {
+            alert('กรุณาเลือกสถานที่ลำดับที่ ' + no);
+            document.getElementById('modalconfirms').innerHTML = '';
+            break;
+          } else if (room !== '-- เลือกสถานที่ --') {
+            document.getElementById('modalconfirms').innerHTML =
+              '<div class="modal fade" id="modalconfirm" tabindex="-1" role="dialog" aria-labelledby=" exampleModalLabel"' +
+              'aria-hidden="true">' +
+              '<div class="modal-dialog" role="document">' +
+              '<div class="modal-content">' +
+              '<div class="modal-header">' +
+              '<h5 class="modal-title" id="exampleModalLabel">ยืนยัน</h5>' +
+              '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
+              '<span aria-hidden="true">×</span>' +
+              '</button>' +
+              '</div>' +
+              '<div class="modal-body">' +
+              'ยืนยันการเพิ่มรายการ ' + no + ' รายการของ "' + localStorage.getItem('namedis') + '" ?' +
+              '</div>' +
+              '<div class="modal-footer">' +
+              '<button type="button" class="btn btn-danger" data-dismiss="modal">ยกเลิก</button>' +
+              '<button type="button" class="btn btn-success"  id="confirm">ตกลง</button>' +
+              '</div>' +
+              '</div>' +
+              '</div>' +
+              '</div>';
+          }
+        }
+        //--insert value
+        $("#confirm").click(function () {
+
+          var hn = localStorage.getItem("hn");
+          var date = fDate
+          var time = today.toLocaleTimeString();
+          for (no = 1; no < counter; no++) {
+            var room = $('#selectbox' + no).val();
+            axios.post('https://endproject62.herokuapp.com/roomseq', {
+              hn: hn,
+              no: no,
+              room: room,
+              date: date,
+              time: time
+            }).catch(function(err){
+              err
+            })
+          }
+          alert('เพิ่มข้อมูลสำเร็จ');
+          // localStorage.clear();
+          document.getElementById('confirm').setAttribute('data-dismiss','modal')
+          setTimeout(function(){
+            window.location.href = 'patient_manage.html';
+          },1500)
+          
+        })
+      })
+
+
+    })
+
+  </script>
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+
+</body>
+
+<script>
+  getroom()
+  function getroom() {
+    axios.get('https://obscure-refuge-47108.herokuapp.com/room/1').then(function (rs) {
+      var testobject = rs.data;
+      console.log(testobject);
+      for (var i = 0; i < testobject.length; i++) {
+        console.log(testobject[i].p_name);
+        var x = document.getElementById("selectbox1");
+        var option = document.createElement("option");
+        option.text = testobject[i].p_name;
+        x.add(option);
+      }
+
+    }).catch(function (error) {
+
+    })
+  }
+
+  function addnew1() {
+    axios.get('https://obscure-refuge-47108.herokuapp.com/room/1').then(function (rs) {
+      var testobject = rs.data;
+      console.log(testobject);
+      for (var i = 0; i < testobject.length; i++) {
+        console.log(testobject[i].p_name);
+        var x = document.getElementById("selectbox" + (counter - 1));
+        var option = document.createElement("option");
+        option.text = testobject[i].p_name;
+        x.add(option);
+
+      }
+
+    }).catch(function (error) {
+
+    })
+  }
+</script>
+
+</html>
